@@ -1,0 +1,37 @@
+[
+  {
+    "id": "red",
+    "description":"red is red",
+    "value": "#f00"
+  },
+  {
+    "id": "green",
+    "description":"green is green",
+    "value": "#0f0"
+  },
+  {
+    "id": "blue",
+    "description":"blue is blue",
+    "value": "#00f"
+  },
+  {
+    "id": "cyan",
+    "description":"cyan is cyan",
+    "value": "#0ff"
+  },
+  {
+    "id": "magenta",
+    "description":"cyan is cyan",
+    "value": "#f0f"
+  },
+  {
+    "id": "yellow",
+    "description":"yellow is yellow",
+    "value": "#ff0"
+  },
+  {
+    "id": "black",
+    "description":"black is black",
+    "value": "#000"
+  }
+]
