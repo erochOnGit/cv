@@ -10,7 +10,6 @@ const EnhanceApp = App =>
         .then(res => res.json())
         .then(colors => {
           this.setState({ colors });
-          console.log(this.state.colors);
         });
     }
     render() {
