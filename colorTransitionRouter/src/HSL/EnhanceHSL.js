@@ -9,7 +9,8 @@ const EnhanceHSL = HSL =>
         mousex: null,
         mousey: null,
         dragging: false,
-        translateX: 0
+        translateX: 0,
+        startingX: 0
       };
       this.dragStart = this.dragStart.bind(this);
       this.dragStop = this.dragStop.bind(this);
@@ -21,8 +22,8 @@ const EnhanceHSL = HSL =>
             ...styles.fill,
             ...styles.hsl,
             background: `hsl(${params.h}, ${params.s}%, ${params.l}%)`,
-            transform: `translate(${this.state.translateX}px)`,
-            transition: "transform 300ms ease-in-out"
+            transform: `translate(${this.state.translateX -
+              this.state.startingX}px)`
           }
         : {
             ...styles.fill,
@@ -33,21 +34,28 @@ const EnhanceHSL = HSL =>
     dragStart = e => {
       this.setState({ mousex: e.pageX });
       this.setState({ mousey: e.pageY });
+      this.setState({ translateX: e.pageX });
+      this.setState({ startingX: e.pageX });
       this.setState({ dragging: true });
+      var crt = document.createElement("img");
+      crt.id = "removable";
+      crt.style.display =
+        "none"; /* or visibility: hidden, or any of the above */
+      document.body.appendChild(crt);
+      e.dataTransfer.setDragImage(crt, 0, 0);
     };
     dragStop = e => {
-      console.log("stop");
       this.setState({ mousex: e.pageX });
       this.setState({ mousey: e.pageY });
       this.setState({ dragging: false });
       this.setState({ translateX: 0 });
+      document.body.removeChild(document.getElementById("removable"));
     };
     mouseMove = e => {
       if (this.state.dragging) {
         this.setState({ mousex: e.pageX });
         this.setState({ translateX: this.state.mousex });
       }
-      console.log(this.state.translateX);
     };
     render() {
       return (
