@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "../styles";
 
 const EnhanceHSL = HSL =>
   class extends React.Component {
@@ -6,21 +7,57 @@ const EnhanceHSL = HSL =>
       super(props);
       this.state = {
         mousex: null,
-        mousey: null
+        mousey: null,
+        dragging: false,
+        translateX: 0
       };
-      this.onMouseUpdate = this.onMouseUpdate.bind(this);
+      this.dragStart = this.dragStart.bind(this);
+      this.dragStop = this.dragStop.bind(this);
+      this.mouseMove = this.mouseMove.bind(this);
     }
-    onMouseUpdate = e => {
-      console.log("fgtfd" + e);
+    style = params => {
+      return this.state.dragging
+        ? {
+            ...styles.fill,
+            ...styles.hsl,
+            background: `hsl(${params.h}, ${params.s}%, ${params.l}%)`,
+            transform: `translate(${this.state.translateX}px)`,
+            transition: "transform 300ms ease-in-out"
+          }
+        : {
+            ...styles.fill,
+            ...styles.hsl,
+            background: `hsl(${params.h}, ${params.s}%, ${params.l}%)`
+          };
+    };
+    dragStart = e => {
       this.setState({ mousex: e.pageX });
       this.setState({ mousey: e.pageY });
+      this.setState({ dragging: true });
+    };
+    dragStop = e => {
+      console.log("stop");
+      this.setState({ mousex: e.pageX });
+      this.setState({ mousey: e.pageY });
+      this.setState({ dragging: false });
+      this.setState({ translateX: 0 });
+    };
+    mouseMove = e => {
+      if (this.state.dragging) {
+        this.setState({ mousex: e.pageX });
+        this.setState({ translateX: this.state.mousex });
+      }
+      console.log(this.state.translateX);
     };
     render() {
       return (
         <HSL
-          onMouseEnter={this.onMouseUpdate}
-          onMouseMove={this.onMouseUpdate}
-          // onClick={console.log("e") || this.onMouseUpdate}
+          styleAssignation={this.style}
+          actions={{
+            start: this.dragStart,
+            stop: this.dragStop,
+            move: this.mouseMove
+          }}
           {...this.state}
           {...this.props}
         />
