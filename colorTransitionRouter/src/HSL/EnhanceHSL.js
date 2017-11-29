@@ -6,7 +6,7 @@ const EnhanceHSL = HSL =>
     constructor(props) {
       super(props);
       this.state = {
-        mousex: null,
+        mouseX: null,
         mousey: null,
         dragging: false,
         translateX: 0,
@@ -15,6 +15,9 @@ const EnhanceHSL = HSL =>
       this.dragStart = this.dragStart.bind(this);
       this.dragStop = this.dragStop.bind(this);
       this.mouseMove = this.mouseMove.bind(this);
+    }
+    componentDidMount(){
+        // this.props.children.map(child=>child.setAttribute('draggable','true'))
     }
     style = params => {
       return this.state.dragging
@@ -32,7 +35,7 @@ const EnhanceHSL = HSL =>
           };
     };
     dragStart = e => {
-      this.setState({ mousex: e.pageX });
+      this.setState({ mouseX: e.pageX });
       this.setState({ mousey: e.pageY });
       this.setState({ translateX: e.pageX });
       this.setState({ startingX: e.pageX });
@@ -45,7 +48,14 @@ const EnhanceHSL = HSL =>
       e.dataTransfer.setDragImage(crt, 0, 0);
     };
     dragStop = e => {
-      this.setState({ mousex: e.pageX });
+      // if (this.state.translateX > this.state.startingX + 100) {
+      //   console.log("swipe to the right");
+      // } else if (this.state.translateX < this.state.startingX - 100) {
+      //   console.log("swipe to the left");
+      // } else {
+      //   console.log("didn't swipe enough stronger");
+      // }
+      this.setState({ mouseX: e.pageX });
       this.setState({ mousey: e.pageY });
       this.setState({ dragging: false });
       this.setState({ translateX: 0 });
@@ -53,12 +63,23 @@ const EnhanceHSL = HSL =>
     };
     mouseMove = e => {
       if (this.state.dragging) {
-        this.setState({ mousex: e.pageX });
-        this.setState({ translateX: this.state.mousex });
+        this.setState({ mouseX: e.pageX });
+        this.setState({ translateX: this.state.mouseX });
       }
     };
     render() {
-      return (
+      return this.state.dragging === false ? (
+        <HSL
+          styleAssignation={this.style}
+          actions={{
+            start: this.dragStart,
+            stop: this.dragStop,
+            move: this.mouseMove
+          }}
+          {...this.state}
+          {...this.props}
+        />
+      ) : (
         <HSL
           styleAssignation={this.style}
           actions={{
